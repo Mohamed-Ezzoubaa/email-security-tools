@@ -341,7 +341,7 @@
         .html-preview-frame {
             margin-top: 15px;
             width: 100%;
-            height: 250px;
+            height: 350px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
             background: #fff;
@@ -401,7 +401,7 @@
             <button class="tab-btn" onclick="switchTab('diffTab')">Text Diff Checker</button>
             <button class="tab-btn" onclick="switchTab('paraTab')">Random Paragraph Generator</button>
             <button class="tab-btn" onclick="switchTab('spamCheckTab')">Spam Words Checker</button>
-            <button class="tab-btn" onclick="switchTab('htmlTab')">Text to HTML & Preview</button>
+            <button class="tab-btn" onclick="switchTab('htmlTab')">HTML Code Live Previewer</button>
             <button class="tab-btn" onclick="switchTab('encodeTab')">Universal Encoder / Decoder</button>
             <button class="tab-btn" onclick="switchTab('ipConvertTab')">IPv4 Converter</button>
             <button class="tab-btn" onclick="switchTab('whoisTab')">Bulk WHOIS Lookup</button>
@@ -520,7 +520,7 @@
                 </div>
             </div>
 
-            <!-- NEW TAB 5: IP/DOMAIN EXTRACTOR -->
+            <!-- TAB 5: IP/DOMAIN EXTRACTOR -->
             <div id="extractorTab" class="tab-content">
                 <h2>IP & Domain Extractor</h2>
                 <label for="extractRawText">Paste Raw Unstructured Text:</label>
@@ -535,7 +535,7 @@
                 <button class="copy-btn" onclick="copyResult('extractOutput')">Copy Extracted List</button>
             </div>
 
-            <!-- NEW TAB 6: TEXT DIFFERENCE CHECKER -->
+            <!-- TAB 6: TEXT DIFFERENCE CHECKER -->
             <div id="diffTab" class="tab-content">
                 <h2>Text Compare / Diff Checker</h2>
                 <div class="grid-2col">
@@ -553,7 +553,7 @@
                 <div class="result-box" id="diffOutput">Difference view will appear here...</div>
             </div>
 
-            <!-- NEW TAB 7: RANDOM PARAGRAPH GENERATOR -->
+            <!-- TAB 7: RANDOM PARAGRAPH GENERATOR -->
             <div id="paraTab" class="tab-content">
                 <h2>Random Paragraph Generator</h2>
                 <label for="paraCount">Number of Paragraphs:</label>
@@ -564,7 +564,7 @@
                 <button class="copy-btn" onclick="copyResult('paraOutput')">Copy Text</button>
             </div>
 
-            <!-- NEW TAB 8: SPAM WORDS CHECKER -->
+            <!-- TAB 8: SPAM WORDS CHECKER -->
             <div id="spamCheckTab" class="tab-content">
                 <h2>Email Spam Words Checker</h2>
                 <label for="spamInputText">Paste Email Subject / Content:</label>
@@ -577,22 +577,21 @@
                 <div class="result-box" id="spamOutput">Highlighted content will appear here...</div>
             </div>
 
-            <!-- NEW TAB 9: TEXT TO HTML & PREVIEW -->
+            <!-- TAB 9: HTML LIVE PREVIEWER (MODIFIED) -->
             <div id="htmlTab" class="tab-content">
-                <h2>Text to HTML Converter & Previewer</h2>
-                <label for="rawTextInput">Paste Plain Text:</label>
-                <textarea id="rawTextInput" placeholder="Enter paragraph lines...&#10;- Item 1&#10;- Item 2"></textarea>
-                <button onclick="convertTextToHTML()">Convert & Render</button>
-                
-                <label>Generated HTML Source:</label>
-                <div class="result-box" id="htmlCodeOutput">HTML code will display here...</div>
-                <button class="copy-btn" onclick="copyResult('htmlCodeOutput')">Copy HTML Code</button>
+                <h2>HTML Code Live Previewer</h2>
+                <label for="htmlCodeInput">Paste HTML Code Here:</label>
+                <textarea id="htmlCodeInput" placeholder="<h1>Hello World</h1>&#10;<p>Paste your HTML code here to preview live...</p>" oninput="updateHTMLPreview()"></textarea>
 
-                <label>Live HTML Visual Preview:</label>
+                <div class="controls-row">
+                    <button class="copy-btn" style="width: auto; margin-top: 10px;" onclick="copyResult('htmlCodeInput')">Copy HTML Code</button>
+                </div>
+
+                <label style="margin-top: 20px;">Live HTML Visual Preview:</label>
                 <iframe class="html-preview-frame" id="htmlPreviewFrame"></iframe>
             </div>
 
-            <!-- NEW TAB 10: UNIVERSAL ENCODER / DECODER -->
+            <!-- TAB 10: UNIVERSAL ENCODER / DECODER -->
             <div id="encodeTab" class="tab-content">
                 <h2>Universal Text Encoder / Decoder</h2>
                 <label for="encodeMode">Select Conversion Type:</label>
@@ -616,7 +615,7 @@
                 <button class="copy-btn" onclick="copyResult('encodeOutput')">Copy Output</button>
             </div>
 
-            <!-- NEW TAB 11: IPV4 CONVERTER -->
+            <!-- TAB 11: IPV4 CONVERTER -->
             <div id="ipConvertTab" class="tab-content">
                 <h2>IPv4 Address Format Converter</h2>
                 <label for="ipv4Input">Enter Single IPv4 Address:</label>
@@ -639,7 +638,7 @@
                 </div>
             </div>
 
-            <!-- NEW TAB 12: BULK WHOIS LOOKUP -->
+            <!-- TAB 12: BULK WHOIS LOOKUP -->
             <div id="whoisTab" class="tab-content">
                 <h2>Bulk WHOIS Domain Lookup</h2>
                 <label for="whoisBulkInput">Enter Domains (1 per line):</label>
@@ -684,7 +683,8 @@
     }
 
     function copyResult(elementId) {
-        const textToCopy = document.getElementById(elementId).innerText;
+        const el = document.getElementById(elementId);
+        const textToCopy = el.value !== undefined ? el.value : el.innerText;
         navigator.clipboard.writeText(textToCopy).then(() => showToast('Copied to clipboard!'));
     }
 
@@ -953,30 +953,13 @@
         document.getElementById('spamOutput').innerHTML = highlighted;
     }
 
-    /* Tab 9: Text to HTML & Preview */
-    function convertTextToHTML() {
-        const raw = document.getElementById('rawTextInput').value;
-        const lines = raw.split('\n');
-        let htmlOutput = '';
-
-        lines.forEach(line => {
-            let trimmed = line.trim();
-            if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                htmlOutput += `  <li>${escapeHtml(trimmed.substring(2))}</li>\n`;
-            } else if (trimmed.length > 0) {
-                htmlOutput += `<p>${escapeHtml(trimmed)}</p>\n`;
-            }
-        });
-
-        if (htmlOutput.includes('<li>')) {
-            htmlOutput = `<ul>\n${htmlOutput}</ul>`;
-        }
-
-        document.getElementById('htmlCodeOutput').innerText = htmlOutput;
-        
+    /* Tab 9: HTML Live Previewer */
+    function updateHTMLPreview() {
+        const htmlContent = document.getElementById('htmlCodeInput').value;
         const frame = document.getElementById('htmlPreviewFrame').contentWindow.document;
+        
         frame.open();
-        frame.write(htmlOutput);
+        frame.write(htmlContent);
         frame.close();
     }
 
