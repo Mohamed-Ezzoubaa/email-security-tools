@@ -338,6 +338,16 @@
             display: inline-block;
         }
 
+        .badge-fail {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
         /* Output & Table Layouts */
         .result-box {
             margin-top: 20px;
@@ -431,7 +441,6 @@
             transition: width 0.2s;
         }
 
-        /* HTML Live Preview Box */
         .html-preview-frame {
             margin-top: 15px;
             width: 100%;
@@ -441,7 +450,6 @@
             background: #fff;
         }
 
-        /* Spam Highlight Styling */
         .spam-highlight {
             background-color: #fecaca;
             color: #dc2626;
@@ -450,11 +458,9 @@
             border-radius: 4px;
         }
 
-        /* Diff Highlighting */
         .diff-added { background-color: #dcfce7; color: #15803d; }
         .diff-removed { background-color: #fee2e2; color: #b91c1c; text-decoration: line-through; }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -531,10 +537,11 @@
                         </div>
                     </div>
                     
+                    <!-- Category Dropdown -->
                     <div class="custom-dropdown-container">
                         <label>Email Categories</label>
                         <div class="dropdown-select-btn" onclick="toggleDropdown('catDropdown')">
-                            <span id="catSelectedLabel">Primary</span>
+                            <span id="catSelectedLabel">Select Categories</span>
                             <span>▾</span>
                         </div>
                         <div id="catDropdown" class="dropdown-menu">
@@ -544,21 +551,22 @@
                                 <button type="button" onclick="selectAllCheckboxes('catList', false)">Clear</button>
                             </div>
                             <div id="catList" class="checkbox-list">
-                                <label><input type="checkbox" value="Primary" checked> Primary</label>
-                                <label><input type="checkbox" value="Social"> Social</label>
-                                <label><input type="checkbox" value="Promotions"> Promotions</label>
-                                <label><input type="checkbox" value="Updates"> Updates</label>
-                                <label><input type="checkbox" value="Forums"> Forums</label>
-                                <label><input type="checkbox" value="Spam"> Spam</label>
-                                <label><input type="checkbox" value="Trash"> Trash</label>
+                                <label><input type="checkbox" value="Primary" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Primary</label>
+                                <label><input type="checkbox" value="Social" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Social</label>
+                                <label><input type="checkbox" value="Promotions" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Promotions</label>
+                                <label><input type="checkbox" value="Updates" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Updates</label>
+                                <label><input type="checkbox" value="Forums" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Forums</label>
+                                <label><input type="checkbox" value="Spam" checked onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Spam</label>
+                                <label><input type="checkbox" value="Trash" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Trash</label>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Fields Dropdown -->
                     <div class="custom-dropdown-container">
                         <label>Data Fields to Extract</label>
                         <div class="dropdown-select-btn" onclick="toggleDropdown('fieldDropdown')">
-                            <span id="fieldSelectedLabel">From Email +5 more</span>
+                            <span id="fieldSelectedLabel">Select Fields</span>
                             <span>▾</span>
                         </div>
                         <div id="fieldDropdown" class="dropdown-menu">
@@ -568,15 +576,14 @@
                                 <button type="button" onclick="selectAllCheckboxes('fieldList', false)">Clear</button>
                             </div>
                             <div id="fieldList" class="checkbox-list">
-                                <label><input type="checkbox" value="IP" checked> IP Address</label>
-                                <label><input type="checkbox" value="Domain" checked> Domain</label>
-                                <label><input type="checkbox" value="From Email" checked> From Email</label>
-                                <label><input type="checkbox" value="From Name" checked> From Name</label>
-                                <label><input type="checkbox" value="Subdomain" checked> Subdomain</label>
-                                <label><input type="checkbox" value="Subject" checked> Subject</label>
-                                <label><input type="checkbox" value="Return Path"> Return Path</label>
-                                <label><input type="checkbox" value="SPF" checked> SPF Status</label>
-                                <label><input type="checkbox" value="DKIM" checked> DKIM Status</label>
+                                <label><input type="checkbox" value="Category" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Category</label>
+                                <label><input type="checkbox" value="IP" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> IP Address</label>
+                                <label><input type="checkbox" value="Domain" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Domain</label>
+                                <label><input type="checkbox" value="From Email" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> From Email</label>
+                                <label><input type="checkbox" value="Subdomain" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Subdomain</label>
+                                <label><input type="checkbox" value="Subject" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Subject</label>
+                                <label><input type="checkbox" value="SPF" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> SPF Status</label>
+                                <label><input type="checkbox" value="DKIM" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> DKIM Status</label>
                             </div>
                         </div>
                     </div>
@@ -587,15 +594,15 @@
                 <div class="controls-row" style="margin-top: 25px; justify-content: space-between;">
                     <input type="text" id="gmailSearchInput" placeholder="🔍 Search results..." onkeyup="filterGmailResults()" style="max-width: 300px; margin-top:0;">
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn-secondary" style="margin-top:0; width:auto;" onclick="showToast('Exporting CSV...')">📥 Export</button>
-                        <button class="copy-btn" style="margin-top:0; width:auto;" onclick="showToast('Copied to clipboard!')">📋 Copy</button>
+                        <button class="btn-secondary" style="margin-top:0; width:auto;" onclick="showToast('Exporting CSV...')">📥 Export CSV</button>
+                        <button class="copy-btn" style="margin-top:0; width:auto;" onclick="showToast('Copied to clipboard!')">📋 Copy Table</button>
                     </div>
                 </div>
 
                 <div class="table-container">
                     <table id="gmailResultTable">
                         <thead>
-                            <tr>
+                            <tr id="gmailTableHeader">
                                 <th>Category</th>
                                 <th>IP</th>
                                 <th>Domain</th>
@@ -909,8 +916,24 @@
         });
     }
 
+    function updateDropdownLabel(listId, labelId) {
+        const checked = Array.from(document.querySelectorAll(`#${listId} input[type="checkbox"]:checked`))
+                            .map(cb => cb.value);
+        const label = document.getElementById(labelId);
+        if (checked.length === 0) {
+            label.innerText = 'None selected';
+        } else if (checked.length === 1) {
+            label.innerText = checked[0];
+        } else {
+            label.innerText = `${checked[0]} +${checked.length - 1} more`;
+        }
+    }
+
     function selectAllCheckboxes(listId, checkState) {
-        document.querySelectorAll(`#${listId} input[type="checkbox"]`).forEach(cb => cb.checked = checkState);
+        const checkboxes = document.querySelectorAll(`#${listId} input[type="checkbox"]`);
+        checkboxes.forEach(cb => cb.checked = checkState);
+        const labelId = listId === 'catList' ? 'catSelectedLabel' : 'fieldSelectedLabel';
+        updateDropdownLabel(listId, labelId);
     }
 
     async function startGmailExtraction() {
@@ -918,40 +941,70 @@
         const password = document.getElementById('gmailPassword').value.trim();
         const count = parseInt(document.getElementById('gmailCount').value) || 10;
 
+        const selectedCats = Array.from(document.querySelectorAll('#catList input[type="checkbox"]:checked')).map(cb => cb.value);
+        const selectedFields = Array.from(document.querySelectorAll('#fieldList input[type="checkbox"]:checked')).map(cb => cb.value);
+
         if (!email || !password) {
             return showToast("Please enter Email and App Password.");
         }
 
+        if (selectedCats.length === 0) {
+            return showToast("Please select at least one Email Category.");
+        }
+
+        if (selectedFields.length === 0) {
+            return showToast("Please select at least one Field to extract.");
+        }
+
         showToast("Extracting emails...");
 
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+
+        const thead = document.getElementById('gmailTableHeader');
+        thead.innerHTML = selectedFields.map(f => `<th>${f}</th>`).join('');
+
         const tbody = document.getElementById('gmailTableBody');
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px;">⏳ Connecting to Gmail & fetching ${count} messages...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; padding:20px;">⏳ Fetching ${count} messages from ${selectedCats.join(', ')}...</td></tr>`;
 
         setTimeout(() => {
-            let mockEmails = [
-                { cat: 'Primary', ip: '51.222.115.79', domain: 'jimcarl.com', from: 'marketing@emeraldscrolluk.jimcarl.com', sub: 'emeraldscrolluk.jimcarl.com', subject: 'FINAL DAY | Add your experience report 120914528', spf: 'pass', dkim: 'pass with domain: @jimcarl.com' },
-                { cat: 'Primary', ip: '51.222.115.76', domain: 'freecamnetwork.com', from: 'marketing@fi17-swf.freecamnetwork.com', sub: 'fi17-swf.freecamnetwork.com', subject: 'FINAL DAY | Add your experience to next fi17-swf', spf: 'pass', dkim: 'pass with domain: @freecamnetwork.com' },
-                { cat: 'Primary', ip: '51.222.115.75', domain: 'governmentpage.com', from: 'marketing@draggled.governmentpage.com', sub: 'draggled.governmentpage.com', subject: 'FINAL DAY | Add your experience report 120914528', spf: 'pass', dkim: 'pass with domain: @governmentpage.com' },
-                { cat: 'Primary', ip: '5.135.31.97', domain: 'eranavarrebeach.com', from: 'marketing@subscribercenter.eranavarrebeach.com', sub: 'subscribercenter.eranavarrebeach.com', subject: 'FINAL DAY | Add your experience', spf: 'pass', dkim: 'pass with domain: @eranavarrebeach.com' }
+            let dataset = [
+                { Category: 'Spam', IP: '198.51.100.24', Domain: 'offers-promodeals.com', 'From Email': 'alert@offers-promodeals.com', Subdomain: 'mail.offers-promodeals.com', Subject: 'URGENT: Claim your reward points now', SPF: 'pass', DKIM: 'pass' },
+                { Category: 'Spam', IP: '203.0.113.88', Domain: 'secure-update-notice.net', 'From Email': 'support@secure-update-notice.net', Subdomain: 'auth.secure-update-notice.net', Subject: 'Account Verification Required', SPF: 'fail', DKIM: 'fail' },
+                { Category: 'Primary', IP: '51.222.115.79', Domain: 'jimcarl.com', 'From Email': 'marketing@emeraldscrolluk.jimcarl.com', Subdomain: 'emeraldscrolluk.jimcarl.com', Subject: 'FINAL DAY | Add your experience report 120914528', SPF: 'pass', DKIM: 'pass' },
+                { Category: 'Primary', IP: '51.222.115.76', Domain: 'freecamnetwork.com', 'From Email': 'marketing@fi17-swf.freecamnetwork.com', Subdomain: 'fi17-swf.freecamnetwork.com', Subject: 'FINAL DAY | Add your experience to next fi17-swf', SPF: 'pass', DKIM: 'pass' },
+                { Category: 'Primary', IP: '51.222.115.75', Domain: 'governmentpage.com', 'From Email': 'marketing@draggled.governmentpage.com', Subdomain: 'draggled.governmentpage.com', Subject: 'FINAL DAY | Add your experience report 120914528', SPF: 'pass', DKIM: 'pass' },
+                { Category: 'Primary', IP: '5.135.31.97', Domain: 'eranavarrebeach.com', 'From Email': 'marketing@subscribercenter.eranavarrebeach.com', Subdomain: 'subscribercenter.eranavarrebeach.com', Subject: 'FINAL DAY | Add your experience', SPF: 'pass', DKIM: 'pass' }
             ];
 
+            let filtered = dataset.filter(item => selectedCats.includes(item.Category));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; color:#64748b;">No emails found in selected category (${selectedCats.join(', ')}).</td></tr>`;
+                return;
+            }
+
             tbody.innerHTML = '';
-            mockEmails.slice(0, count).forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><span class="badge-pass" style="background:#e0e7ff; color:#3730a3;">${item.cat}</span></td>
-                        <td><b>${item.ip}</b></td>
-                        <td>${item.domain}</td>
-                        <td>${item.from}</td>
-                        <td>${item.sub}</td>
-                        <td>${item.subject}</td>
-                        <td><span class="badge-pass">✓ ${item.spf}</span></td>
-                        <td><span class="badge-pass">✓ ${item.dkim}</span></td>
-                    </tr>
-                `;
+            filtered.slice(0, count).forEach(item => {
+                let rowHtml = '<tr>';
+                selectedFields.forEach(field => {
+                    let val = item[field] || '-';
+                    if (field === 'Category') {
+                        rowHtml += `<td><span class="badge-pass" style="background:#e0e7ff; color:#3730a3;">${val}</span></td>`;
+                    } else if (field === 'SPF' || field === 'DKIM') {
+                        let badgeClass = val === 'pass' ? 'badge-pass' : 'badge-fail';
+                        rowHtml += `<td><span class="${badgeClass}">${val}</span></td>`;
+                    } else if (field === 'IP') {
+                        rowHtml += `<td><b>${val}</b></td>`;
+                    } else {
+                        rowHtml += `<td>${val}</td>`;
+                    }
+                });
+                rowHtml += '</tr>';
+                tbody.innerHTML += rowHtml;
             });
+
             showToast("Extraction completed successfully!");
-        }, 1200);
+        }, 1000);
     }
 
     function filterGmailResults() {
@@ -1349,6 +1402,12 @@
             document.getElementById('whoisProgressBar').innerText = pct + '%';
         }
     }
+
+    // Initialize labels on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateDropdownLabel('catList', 'catSelectedLabel');
+        updateDropdownLabel('fieldList', 'fieldSelectedLabel');
+    });
 </script>
 </body>
 </html>
