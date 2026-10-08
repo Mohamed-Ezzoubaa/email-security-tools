@@ -117,7 +117,7 @@
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2e8f0;
-            max-width: 1100px;
+            max-width: 1250px;
             margin: 0 auto;
         }
 
@@ -247,16 +247,16 @@
         /* Gmail Extractor Custom Grid & Dropdowns */
         .grid-extractor-controls {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-        .custom-dropdown-container {
+        .dropdown-container {
             position: relative;
         }
 
-        .dropdown-select-btn {
+        .dropdown-btn {
             padding: 11px 14px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
@@ -274,12 +274,11 @@
             position: absolute;
             top: 100%;
             left: 0;
-            width: 100%;
-            min-width: 260px;
+            width: 300px;
             background: #ffffff;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             z-index: 100;
             padding: 12px;
         }
@@ -288,28 +287,44 @@
             display: block;
         }
 
+        .dropdown-search {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
         .dropdown-actions {
             display: flex;
             gap: 8px;
-            margin: 8px 0;
+            margin-bottom: 8px;
         }
 
         .dropdown-actions button {
-            padding: 4px 8px;
+            flex: 1;
+            padding: 5px;
             font-size: 11px;
-            margin-top: 0;
             background: #f1f5f9;
             color: #334155;
             border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        .dropdown-actions button:hover {
+            background: #e2e8f0;
         }
 
         .checkbox-list {
-            max-height: 180px;
+            max-height: 220px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-top: 8px;
         }
 
         .checkbox-list label {
@@ -321,31 +336,18 @@
             gap: 8px;
             cursor: pointer;
             font-size: 13px;
+            color: #1e293b;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .checkbox-list label:hover {
+            background: #f8fafc;
         }
 
         .checkbox-list input {
             width: auto;
             margin: 0;
-        }
-
-        .badge-pass {
-            background-color: #dcfce7;
-            color: #15803d;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .badge-fail {
-            background-color: #fee2e2;
-            color: #b91c1c;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: inline-block;
         }
 
         /* Output & Table Layouts */
@@ -367,17 +369,21 @@
         .table-container {
             margin-top: 20px;
             overflow-x: auto;
+            max-height: 500px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 13px;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
         th, td {
-            padding: 12px 14px;
+            padding: 10px 12px;
             border: 1px solid #e2e8f0;
             text-align: left;
         }
@@ -387,6 +393,36 @@
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .th-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .btn-copy-col {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: 0.2s;
+            margin-top: 0;
+            width: auto;
+        }
+
+        .btn-copy-col:hover {
+            background: #2563eb;
         }
 
         tr:nth-child(even) {
@@ -523,7 +559,7 @@
                 <div class="grid-extractor-controls">
                     <div>
                         <label for="gmailAddress">Email Address</label>
-                        <input type="text" id="gmailAddress" placeholder="example@gmail.com">
+                        <input type="text" id="gmailAddress" value="cmh.em003@gmail.com" placeholder="example@gmail.com">
                     </div>
                     <div>
                         <label for="gmailPassword">App Password</label>
@@ -538,64 +574,79 @@
                     </div>
                     
                     <!-- Category Dropdown -->
-                    <div class="custom-dropdown-container">
+                    <div class="dropdown-container">
                         <label>Email Categories</label>
-                        <div class="dropdown-select-btn" onclick="toggleDropdown('catDropdown')">
-                            <span id="catSelectedLabel">Select Categories</span>
+                        <div class="dropdown-btn" onclick="toggleDropdown('catDropdown')">
+                            <span id="catSelectedLabel">Primary</span>
                             <span>▾</span>
                         </div>
                         <div id="catDropdown" class="dropdown-menu">
-                            <input type="text" placeholder="Search..." onkeyup="filterDropdown(this, 'catList')">
+                            <input type="text" class="dropdown-search" placeholder="Search..." onkeyup="filterList('catList', this.value)">
                             <div class="dropdown-actions">
-                                <button type="button" onclick="selectAllCheckboxes('catList', true)">Select all</button>
-                                <button type="button" onclick="selectAllCheckboxes('catList', false)">Clear</button>
+                                <button type="button" onclick="selectAll('catList', true)">Select all</button>
+                                <button type="button" onclick="selectAll('catList', false)">Clear</button>
                             </div>
                             <div id="catList" class="checkbox-list">
-                                <label><input type="checkbox" value="Primary" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Primary</label>
-                                <label><input type="checkbox" value="Social" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Social</label>
-                                <label><input type="checkbox" value="Promotions" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Promotions</label>
-                                <label><input type="checkbox" value="Updates" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Updates</label>
-                                <label><input type="checkbox" value="Forums" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Forums</label>
-                                <label><input type="checkbox" value="Spam" checked onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Spam</label>
-                                <label><input type="checkbox" value="Trash" onchange="updateDropdownLabel('catList', 'catSelectedLabel')"> Trash</label>
+                                <label><input type="checkbox" value="Primary" checked onchange="updateLabel('catList', 'catSelectedLabel')"> Primary</label>
+                                <label><input type="checkbox" value="Social" onchange="updateLabel('catList', 'catSelectedLabel')"> Social</label>
+                                <label><input type="checkbox" value="Promotions" onchange="updateLabel('catList', 'catSelectedLabel')"> Promotions</label>
+                                <label><input type="checkbox" value="Updates" onchange="updateLabel('catList', 'catSelectedLabel')"> Updates</label>
+                                <label><input type="checkbox" value="Forums" onchange="updateLabel('catList', 'catSelectedLabel')"> Forums</label>
+                                <label><input type="checkbox" value="Spam" onchange="updateLabel('catList', 'catSelectedLabel')"> Spam</label>
+                                <label><input type="checkbox" value="Trash" onchange="updateLabel('catList', 'catSelectedLabel')"> Trash</label>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Fields Dropdown -->
-                    <div class="custom-dropdown-container">
+                    <!-- Data Fields Dropdown -->
+                    <div class="dropdown-container">
                         <label>Data Fields to Extract</label>
-                        <div class="dropdown-select-btn" onclick="toggleDropdown('fieldDropdown')">
-                            <span id="fieldSelectedLabel">Select Fields</span>
+                        <div class="dropdown-btn" onclick="toggleDropdown('fieldDropdown')">
+                            <span id="fieldSelectedLabel">From Email +7 more</span>
                             <span>▾</span>
                         </div>
                         <div id="fieldDropdown" class="dropdown-menu">
-                            <input type="text" placeholder="Search..." onkeyup="filterDropdown(this, 'fieldList')">
+                            <input type="text" class="dropdown-search" placeholder="Search fields..." onkeyup="filterList('fieldList', this.value)">
                             <div class="dropdown-actions">
-                                <button type="button" onclick="selectAllCheckboxes('fieldList', true)">Select all</button>
-                                <button type="button" onclick="selectAllCheckboxes('fieldList', false)">Clear</button>
+                                <button type="button" onclick="selectAll('fieldList', true)">Select all</button>
+                                <button type="button" onclick="selectAll('fieldList', false)">Clear</button>
                             </div>
                             <div id="fieldList" class="checkbox-list">
-                                <label><input type="checkbox" value="Category" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Category</label>
-                                <label><input type="checkbox" value="IP" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> IP Address</label>
-                                <label><input type="checkbox" value="Domain" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Domain</label>
-                                <label><input type="checkbox" value="From Email" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> From Email</label>
-                                <label><input type="checkbox" value="Subdomain" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Subdomain</label>
-                                <label><input type="checkbox" value="Subject" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> Subject</label>
-                                <label><input type="checkbox" value="SPF" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> SPF Status</label>
-                                <label><input type="checkbox" value="DKIM" checked onchange="updateDropdownLabel('fieldList', 'fieldSelectedLabel')"> DKIM Status</label>
+                                <label><input type="checkbox" value="IP" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> IP Address</label>
+                                <label><input type="checkbox" value="From Name" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> From Name</label>
+                                <label><input type="checkbox" value="From Email" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> From Email</label>
+                                <label><input type="checkbox" value="From Domain" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> From Domain</label>
+                                <label><input type="checkbox" value="Subdomain" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Subdomain</label>
+                                <label><input type="checkbox" value="Subject" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Subject</label>
+                                <label><input type="checkbox" value="To Address" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> To Address</label>
+                                <label><input type="checkbox" value="CC Address" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> CC Address</label>
+                                <label><input type="checkbox" value="SPF Status" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> SPF Status</label>
+                                <label><input type="checkbox" value="DKIM Status" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> DKIM Status</label>
+                                <label><input type="checkbox" value="DKIM Parameters" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> DKIM Parameters</label>
+                                <label><input type="checkbox" value="DMARC Status" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> DMARC Status</label>
+                                <label><input type="checkbox" value="Return Path" checked onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Return Path</label>
+                                <label><input type="checkbox" value="Message ID" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Message ID</label>
+                                <label><input type="checkbox" value="Sender" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Sender</label>
+                                <label><input type="checkbox" value="Reply-To" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Reply-To</label>
+                                <label><input type="checkbox" value="In Reply To" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> In Reply To</label>
+                                <label><input type="checkbox" value="Content Type" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Content Type</label>
+                                <label><input type="checkbox" value="MIME Version" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> MIME Version</label>
+                                <label><input type="checkbox" value="List ID" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> List ID</label>
+                                <label><input type="checkbox" value="List Unsubscribe" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> List Unsubscribe</label>
+                                <label><input type="checkbox" value="Feedback ID" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Feedback ID</label>
+                                <label><input type="checkbox" value="Full Email" onchange="updateLabel('fieldList', 'fieldSelectedLabel')"> Full Email</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button style="width: auto; padding: 12px 30px; font-size: 14px;" onclick="startGmailExtraction()">Extract Emails</button>
+                <button style="width: auto; padding: 12px 30px; font-size: 14px;" onclick="runGmailExtraction()">Extract Emails</button>
 
                 <div class="controls-row" style="margin-top: 25px; justify-content: space-between;">
                     <input type="text" id="gmailSearchInput" placeholder="🔍 Search results..." onkeyup="filterGmailResults()" style="max-width: 300px; margin-top:0;">
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn-secondary" style="margin-top:0; width:auto;" onclick="showToast('Exporting CSV...')">📥 Export CSV</button>
-                        <button class="copy-btn" style="margin-top:0; width:auto;" onclick="showToast('Copied to clipboard!')">📋 Copy Table</button>
+                        <button class="btn-secondary" style="margin-top:0; width:auto;" onclick="exportGmailCSV()">📥 Export CSV</button>
+                        <button class="copy-btn" style="margin-top:0; width:auto;" onclick="copyGmailFullTable()">📋 Copy Full Table</button>
                     </div>
                 </div>
 
@@ -603,18 +654,11 @@
                     <table id="gmailResultTable">
                         <thead>
                             <tr id="gmailTableHeader">
-                                <th>Category</th>
-                                <th>IP</th>
-                                <th>Domain</th>
-                                <th>From Email</th>
-                                <th>Subdomain</th>
-                                <th>Subject</th>
-                                <th>SPF</th>
-                                <th>DKIM</th>
+                                <!-- Headers rendered dynamically -->
                             </tr>
                         </thead>
                         <tbody id="gmailTableBody">
-                            <tr><td colspan="8" style="text-align: center; color: #64748b;">No data extracted yet. Enter credentials and click Extract.</td></tr>
+                            <tr><td colspan="8" style="text-align: center; color: #64748b; padding:20px;">No data extracted yet. Enter credentials and click Extract Emails.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -893,7 +937,7 @@
         navigator.clipboard.writeText(textToCopy).then(() => showToast('Copied to clipboard!'));
     }
 
-    /* Tab 0: Gmail Extractor Functions */
+    /* TAB 0: GMAIL EXTRACTOR FUNCTIONS */
     function toggleDropdown(id) {
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu.id !== id) menu.classList.remove('show');
@@ -902,120 +946,149 @@
     }
 
     window.onclick = function(event) {
-        if (!event.target.closest('.custom-dropdown-container')) {
+        if (!event.target.closest('.dropdown-container')) {
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
         }
-    }
+    };
 
-    function filterDropdown(input, listId) {
-        let filter = input.value.toLowerCase();
-        let labels = document.querySelectorAll(`#${listId} label`);
-        labels.forEach(l => {
-            let text = l.innerText.toLowerCase();
-            l.style.display = text.includes(filter) ? 'flex' : 'none';
+    function filterList(listId, text) {
+        const query = text.toLowerCase();
+        document.querySelectorAll(`#${listId} label`).forEach(lbl => {
+            lbl.style.display = lbl.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
         });
     }
 
-    function updateDropdownLabel(listId, labelId) {
-        const checked = Array.from(document.querySelectorAll(`#${listId} input[type="checkbox"]:checked`))
-                            .map(cb => cb.value);
-        const label = document.getElementById(labelId);
-        if (checked.length === 0) {
-            label.innerText = 'None selected';
-        } else if (checked.length === 1) {
-            label.innerText = checked[0];
-        } else {
-            label.innerText = `${checked[0]} +${checked.length - 1} more`;
-        }
-    }
-
-    function selectAllCheckboxes(listId, checkState) {
-        const checkboxes = document.querySelectorAll(`#${listId} input[type="checkbox"]`);
-        checkboxes.forEach(cb => cb.checked = checkState);
+    function selectAll(listId, state) {
+        document.querySelectorAll(`#${listId} input[type="checkbox"]`).forEach(cb => cb.checked = state);
         const labelId = listId === 'catList' ? 'catSelectedLabel' : 'fieldSelectedLabel';
-        updateDropdownLabel(listId, labelId);
+        updateLabel(listId, labelId);
     }
 
-    async function startGmailExtraction() {
-        const email = document.getElementById('gmailAddress').value.trim();
-        const password = document.getElementById('gmailPassword').value.trim();
-        const count = parseInt(document.getElementById('gmailCount').value) || 10;
+    function updateLabel(listId, labelId) {
+        const checked = Array.from(document.querySelectorAll(`#${listId} input[type="checkbox"]:checked`)).map(cb => cb.value);
+        const label = document.getElementById(labelId);
+        if (checked.length === 0) label.innerText = 'None selected';
+        else if (checked.length === 1) label.innerText = checked[0];
+        else label.innerText = `${checked[0]} +${checked.length - 1} more`;
+    }
 
+    function copyColumn(colIndex, colName) {
+        const rows = document.querySelectorAll('#gmailTableBody tr');
+        let colValues = [];
+        
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells[colIndex] && row.style.display !== 'none') {
+                colValues.push(cells[colIndex].innerText.trim());
+            }
+        });
+
+        if (colValues.length === 0) return showToast("No data to copy!");
+
+        navigator.clipboard.writeText(colValues.join('\n')).then(() => {
+            showToast(`Copied ${colValues.length} items from '${colName}'!`);
+        });
+    }
+
+    async function runGmailExtraction() {
+        const email = document.getElementById('gmailAddress').value.trim();
+        const pass = document.getElementById('gmailPassword').value.trim();
+        const start = parseInt(document.getElementById('gmailStart').value) || 1;
+        const count = parseInt(document.getElementById('gmailCount').value) || 10;
+        
         const selectedCats = Array.from(document.querySelectorAll('#catList input[type="checkbox"]:checked')).map(cb => cb.value);
         const selectedFields = Array.from(document.querySelectorAll('#fieldList input[type="checkbox"]:checked')).map(cb => cb.value);
 
-        if (!email || !password) {
-            return showToast("Please enter Email and App Password.");
-        }
-
-        if (selectedCats.length === 0) {
-            return showToast("Please select at least one Email Category.");
-        }
-
-        if (selectedFields.length === 0) {
-            return showToast("Please select at least one Field to extract.");
-        }
-
-        showToast("Extracting emails...");
-
-        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-
-        const thead = document.getElementById('gmailTableHeader');
-        thead.innerHTML = selectedFields.map(f => `<th>${f}</th>`).join('');
+        if (!email || !pass) return showToast("Please enter Email and App Password!");
+        if (!selectedCats.length) return showToast("Select at least 1 Category!");
+        if (!selectedFields.length) return showToast("Select at least 1 Field!");
 
         const tbody = document.getElementById('gmailTableBody');
-        tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; padding:20px;">⏳ Fetching ${count} messages from ${selectedCats.join(', ')}...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; padding:20px;">⏳ Fetching top ${count} emails directly from Gmail IMAP...</td></tr>`;
 
-        setTimeout(() => {
-            let dataset = [
-                { Category: 'Spam', IP: '198.51.100.24', Domain: 'offers-promodeals.com', 'From Email': 'alert@offers-promodeals.com', Subdomain: 'mail.offers-promodeals.com', Subject: 'URGENT: Claim your reward points now', SPF: 'pass', DKIM: 'pass' },
-                { Category: 'Spam', IP: '203.0.113.88', Domain: 'secure-update-notice.net', 'From Email': 'support@secure-update-notice.net', Subdomain: 'auth.secure-update-notice.net', Subject: 'Account Verification Required', SPF: 'fail', DKIM: 'fail' },
-                { Category: 'Primary', IP: '51.222.115.79', Domain: 'jimcarl.com', 'From Email': 'marketing@emeraldscrolluk.jimcarl.com', Subdomain: 'emeraldscrolluk.jimcarl.com', Subject: 'FINAL DAY | Add your experience report 120914528', SPF: 'pass', DKIM: 'pass' },
-                { Category: 'Primary', IP: '51.222.115.76', Domain: 'freecamnetwork.com', 'From Email': 'marketing@fi17-swf.freecamnetwork.com', Subdomain: 'fi17-swf.freecamnetwork.com', Subject: 'FINAL DAY | Add your experience to next fi17-swf', SPF: 'pass', DKIM: 'pass' },
-                { Category: 'Primary', IP: '51.222.115.75', Domain: 'governmentpage.com', 'From Email': 'marketing@draggled.governmentpage.com', Subdomain: 'draggled.governmentpage.com', Subject: 'FINAL DAY | Add your experience report 120914528', SPF: 'pass', DKIM: 'pass' },
-                { Category: 'Primary', IP: '5.135.31.97', Domain: 'eranavarrebeach.com', 'From Email': 'marketing@subscribercenter.eranavarrebeach.com', Subdomain: 'subscribercenter.eranavarrebeach.com', Subject: 'FINAL DAY | Add your experience', SPF: 'pass', DKIM: 'pass' }
-            ];
+        try {
+            const response = await fetch('http://localhost:5000/api/extract', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    password: pass,
+                    start: start,
+                    count: count,
+                    category: selectedCats[0] || 'Primary'
+                })
+            });
 
-            let filtered = dataset.filter(item => selectedCats.includes(item.Category));
+            const resData = await response.json();
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; color:#64748b;">No emails found in selected category (${selectedCats.join(', ')}).</td></tr>`;
+            if (!resData.success) {
+                tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; color:red;">Error: ${resData.error}</td></tr>`;
                 return;
             }
 
+            const data = resData.data;
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center;">No emails found.</td></tr>`;
+                return;
+            }
+
+            // Render Header with Column Copy Icon
+            const thead = document.getElementById('gmailTableHeader');
+            thead.innerHTML = selectedFields.map((field, idx) => `
+                <th>
+                    <div class="th-content">
+                        <span>${field}</span>
+                        <button class="btn-copy-col" onclick="copyColumn(${idx}, '${field}')" title="Copy column data">📋</button>
+                    </div>
+                </th>
+            `).join('');
+
             tbody.innerHTML = '';
-            filtered.slice(0, count).forEach(item => {
-                let rowHtml = '<tr>';
+            data.forEach(item => {
+                let row = '<tr>';
                 selectedFields.forEach(field => {
                     let val = item[field] || '-';
-                    if (field === 'Category') {
-                        rowHtml += `<td><span class="badge-pass" style="background:#e0e7ff; color:#3730a3;">${val}</span></td>`;
-                    } else if (field === 'SPF' || field === 'DKIM') {
-                        let badgeClass = val === 'pass' ? 'badge-pass' : 'badge-fail';
-                        rowHtml += `<td><span class="${badgeClass}">${val}</span></td>`;
-                    } else if (field === 'IP') {
-                        rowHtml += `<td><b>${val}</b></td>`;
-                    } else {
-                        rowHtml += `<td>${val}</td>`;
-                    }
+                    if (field === 'IP') row += `<td><b>${val}</b></td>`;
+                    else row += `<td>${val}</td>`;
                 });
-                rowHtml += '</tr>';
-                tbody.innerHTML += rowHtml;
+                row += '</tr>';
+                tbody.innerHTML += row;
             });
 
-            showToast("Extraction completed successfully!");
-        }, 1000);
+            showToast(`Extracted ${data.length} emails successfully!`);
+
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="${selectedFields.length}" style="text-align:center; color:red;">Could not connect to Python Server! Make sure app.py is running.</td></tr>`;
+        }
     }
 
     function filterGmailResults() {
         let filter = document.getElementById('gmailSearchInput').value.toLowerCase();
-        let rows = document.querySelectorAll('#gmailTableBody tr');
-        rows.forEach(r => {
+        document.querySelectorAll('#gmailTableBody tr').forEach(r => {
             r.style.display = r.innerText.toLowerCase().includes(filter) ? '' : 'none';
         });
     }
 
-    /* Tab 1: SPF Generator */
+    function copyGmailFullTable() {
+        let text = Array.from(document.querySelectorAll('#gmailTableBody tr'))
+                        .map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.innerText).join('\t'))
+                        .join('\n');
+        navigator.clipboard.writeText(text).then(() => showToast("Full table copied to clipboard!"));
+    }
+
+    function exportGmailCSV() {
+        let text = Array.from(document.querySelectorAll('#gmailResultTable tr'))
+                        .map(tr => Array.from(tr.children).map(td => `"${td.innerText.replace(/📋/g, '').replace(/"/g, '""').trim()}"`).join(','))
+                        .join('\n');
+        let blob = new Blob([text], { type: 'text/csv' });
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'gmail_headers_extract.csv';
+        a.click();
+    }
+
+    /* TAB 1: SPF GENERATOR */
     function generateSPF() {
         const type = document.getElementById('recordType').value;
         const rawData = document.getElementById('inputData').value;
@@ -1035,7 +1108,7 @@
         }
     }
 
-    /* Tab 2: SPF Match Checker */
+    /* TAB 2: SPF MATCH CHECKER */
     let csvResultsList = [];
     async function checkSPFMatches() {
         const rawData = document.getElementById('pairData').value;
@@ -1096,7 +1169,7 @@
         navigator.clipboard.writeText(csvResultsList.join('\n')).then(() => showToast(`Copied ${csvResultsList.length} record(s)!`));
     }
 
-    /* Tab 3: DNS Watch */
+    /* TAB 3: DNS WATCH */
     const DNS_RECORD_TYPES = { 'A': 1, 'NS': 2, 'CNAME': 5, 'SOA': 6, 'PTR': 12, 'MX': 15, 'TXT': 16, 'AAAA': 28 };
     let dnsWatchResultsData = [];
     async function processBulkDnsWatch() {
@@ -1139,7 +1212,7 @@
         navigator.clipboard.writeText(text).then(() => showToast(`Copied results!`));
     }
 
-    /* Tab 4: Spamhaus Bulk */
+    /* TAB 4: SPAMHAUS BULK */
     let spamhausResultsData = [];
     async function processSpamhausBulk() {
         const lines = document.getElementById('bulkInput').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
@@ -1190,7 +1263,7 @@
         navigator.clipboard.writeText(list.join('\n')).then(() => showToast(`Copied ${list.length} items!`));
     }
 
-    /* Tab 5: Extractor */
+    /* TAB 5: EXTRACTOR */
     function extractData(type) {
         const text = document.getElementById('extractRawText').value;
         const ipRegex = /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g;
@@ -1210,7 +1283,7 @@
         document.getElementById('extractOutput').innerText = unique.length ? unique.join('\n') : "No items found.";
     }
 
-    /* Tab 6: Diff Checker */
+    /* TAB 6: DIFF CHECKER */
     function compareTexts() {
         const text1 = document.getElementById('diffText1').value.split('\n');
         const text2 = document.getElementById('diffText2').value.split('\n');
@@ -1235,7 +1308,7 @@
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    /* Tab 7: Paragraph Generator */
+    /* TAB 7: PARAGRAPH GENERATOR */
     function generateParagraphs() {
         const words = ["lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "security", "infrastructure", "network", "server", "domain", "protocol", "authentication", "encryption", "payload", "header", "smtp", "dns"];
         const count = parseInt(document.getElementById('paraCount').value) || 3;
@@ -1258,7 +1331,7 @@
         document.getElementById('paraOutput').innerText = output.join("\n\n");
     }
 
-    /* Tab 8: Spam Words Checker */
+    /* TAB 8: SPAM WORDS CHECKER */
     const SPAM_WORDS = ["100% free", "action required", "apply now", "best price", "buy now", "cash bonus", "claim now", "click here", "congratulations", "double your income", "earn money", "exclusive deal", "free access", "free gift", "free money", "guaranteed", "income", "increase sales", "limited time", "make money", "no risk", "no obligation", "opportunity", "passwords", "risk free", "special promotion", "urgent", "winner"];
 
     function checkSpamWords() {
@@ -1280,7 +1353,7 @@
         document.getElementById('spamOutput').innerHTML = highlighted;
     }
 
-    /* Tab 9: Text to HTML & Preview */
+    /* TAB 9: TEXT TO HTML & PREVIEW */
     function convertTextToHTML() {
         const raw = document.getElementById('rawTextInput').value;
         const lines = raw.split('\n');
@@ -1307,7 +1380,7 @@
         frame.close();
     }
 
-    /* Tab 10: Encoders & Decoders */
+    /* TAB 10: ENCODERS & DECODERS */
     function processEncoding(action) {
         const mode = document.getElementById('encodeMode').value;
         const input = document.getElementById('encodeInput').value;
@@ -1348,7 +1421,7 @@
         return str.replace(/=([0-9A-F]{2})/gi, (m, hex) => String.fromCharCode(parseInt(hex, 16)));
     }
 
-    /* Tab 11: IPv4 Converter */
+    /* TAB 11: IPV4 CONVERTER */
     function convertIPv4() {
         const ip = document.getElementById('ipv4Input').value.trim();
         if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) return showToast("Invalid IPv4 format");
@@ -1373,7 +1446,7 @@
         rows[6].children[1].innerText = binaryVal;
     }
 
-    /* Tab 12: Bulk WHOIS Lookup */
+    /* TAB 12: BULK WHOIS LOOKUP */
     async function processBulkWhois() {
         const domains = document.getElementById('whoisBulkInput').value.split('\n').map(d => d.trim()).filter(d => d.length > 0);
         if (!domains.length) return showToast("Enter at least one domain.");
@@ -1403,10 +1476,10 @@
         }
     }
 
-    // Initialize labels on page load
+    // Initialize labels on load
     document.addEventListener('DOMContentLoaded', () => {
-        updateDropdownLabel('catList', 'catSelectedLabel');
-        updateDropdownLabel('fieldList', 'fieldSelectedLabel');
+        updateLabel('catList', 'catSelectedLabel');
+        updateLabel('fieldList', 'fieldSelectedLabel');
     });
 </script>
 </body>
